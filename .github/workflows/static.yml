@@ -33,6 +33,12 @@ jobs:
         run: |
           pip install mkdocs
 
+      # 修改开始：安装 MkDocs 及 Material 主题
+      - name: Install MkDocs and dependencies
+        run: |
+          pip install mkdocs mkdocs-material
+      # 修改结束
+      
       # 修改开始：将 README.md 复制为 docs/index.md
       - name: Prepare MkDocs content
         run: cp README.md docs/index.md  # 将 README.md 复制为 docs/index.md
