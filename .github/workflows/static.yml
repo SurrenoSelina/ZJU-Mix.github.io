@@ -22,7 +22,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -31,13 +30,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install MkDocs and dependencies
+        run: |
+          pip install mkdocs
+
+      # 修改开始：将 README.md 复制为 docs/index.md
+      - name: Prepare MkDocs content
+        run: cp README.md docs/index.md  # 将 README.md 复制为 docs/index.md
+      # 修改结束
+
+      - name: Build the site
+        run: mkdocs build  # 生成静态站点
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: 'site'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
